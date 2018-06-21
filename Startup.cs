@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.Webpack;
@@ -20,12 +16,15 @@ namespace UltraliteRedditViewer
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
+            if (env.IsDevelopment())
+            {
+                builder.AddUserSecrets<Startup>();
+            }
             Configuration = builder.Build();
         }
 
         public IConfigurationRoot Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
@@ -37,8 +36,8 @@ namespace UltraliteRedditViewer
                 DefaultUserAgent = "ScooterMcGavin420_blayzit"
             };
             
-            services.AddTransient(sp => new RedditSharp.AuthProvider(Configuration["RedditClientID"], Configuration["RedditClientSecret"], Configuration["RedditRedirectURI"]));
-            services.AddSingleton(webAgentPool); //Important to add as Singleton so multiple instances aren't created
+            services.AddScoped(sp => new RedditSharp.AuthProvider(Configuration["RedditClientID"], Configuration["RedditClientSecret"], Configuration["RedditRedirectURI"]));
+            services.AddSingleton(webAgentPool);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

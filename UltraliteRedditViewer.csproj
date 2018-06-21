@@ -4,7 +4,7 @@
     <UserSecretsId>e0b975ad-1011-42ae-85b0-b47da649d813</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.1.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.1" />
     <PackageReference Include="RedditSharp" Version="2.0.0-CI00065" />
   </ItemGroup>

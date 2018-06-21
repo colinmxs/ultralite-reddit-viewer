@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -36,6 +36,8 @@ namespace UltraliteRedditViewer
                 DefaultRateLimitMode = RedditSharp.RateLimitMode.Burst,
                 DefaultUserAgent = "ScooterMcGavin420_blayzit"
             };
+            
+            services.AddTransient(sp => new RedditSharp.AuthProvider(Configuration["RedditClientID"], Configuration["RedditClientSecret"], Configuration["RedditRedirectURI"]));
             services.AddSingleton(webAgentPool); //Important to add as Singleton so multiple instances aren't created
         }
 

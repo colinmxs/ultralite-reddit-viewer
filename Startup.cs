@@ -30,6 +30,13 @@ namespace UltraliteRedditViewer
         {
             // Add framework services.
             services.AddMvc();
+
+            var webAgentPool = new RedditSharp.RefreshTokenWebAgentPool(Configuration["RedditClientID"], Configuration["RedditClientSecret"], Configuration["RedditRedirectURI"])
+            {
+                DefaultRateLimitMode = RedditSharp.RateLimitMode.Burst,
+                DefaultUserAgent = "ScooterMcGavin420_blayzit"
+            };
+            services.AddSingleton(webAgentPool); //Important to add as Singleton so multiple instances aren't created
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

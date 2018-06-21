@@ -1,14 +1,14 @@
-﻿<template>
+<template>
     <div class="main-nav">
         <div class="navbar navbar-inverse">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" v-on:click="toggleCollapsed">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                <a class="navbar-brand" href="/">ASP.NET Core with Vue.js 2</a>
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/">Ultralite Viewer for Reddit!</a>
             </div>
             <div class="clearfix"></div>
             <transition name="slide">
@@ -16,9 +16,12 @@
                     <ul class="nav navbar-nav">
                         <li v-for="route in routes">
                             <!-- TODO: highlight active link -->
-                            <router-link :to="route.path">
+                            <router-link v-if="route.display != null" :to="route.path">
                                 <span :class="route.style"></span> {{ route.display }}
                             </router-link>
+                        </li>
+                        <li v-if="!isAuthenticated">
+                            <a href="/authentication/getcode">Sign In</a>
                         </li>
                     </ul>
                 </div>
@@ -28,32 +31,36 @@
 </template>
 
 <script>
-import { routes } from '../routes'
+    import { routes } from '../routes'
 
-export default {
-    data() {
-        return {
-            routes,
-            collapsed : true
-        }
-    },
-    methods: {
-        toggleCollapsed: function(event){
-            this.collapsed = !this.collapsed;
+    export default {
+        data() {
+            return {
+                routes,
+                collapsed: true
+            }
+        },
+        methods: {
+            toggleCollapsed: function (event) {
+                this.collapsed = !this.collapsed;
+            },
+            isAuthenticated() {
+                return localStorage.getItem('access_token') != null
+            }
         }
     }
-}
 </script>
 
 <style>
-.slide-enter-active, .slide-leave-active {
-  transition: max-height .35s
-}
-.slide-enter, .slide-leave-to {
-  max-height: 0px;
-}
+    .slide-enter-active, .slide-leave-active {
+        transition: max-height .35s
+    }
 
-.slide-enter-to, .slide-leave {
-  max-height: 20em;
-}
+    .slide-enter, .slide-leave-to {
+        max-height: 0px;
+    }
+
+    .slide-enter-to, .slide-leave {
+        max-height: 20em;
+    }
 </style>

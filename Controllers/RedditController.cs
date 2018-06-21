@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Threading.Tasks;
 
 namespace UltraliteRedditViewer.Controllers
 {
@@ -6,6 +8,10 @@ namespace UltraliteRedditViewer.Controllers
     [ApiController]
     public class RedditController : ControllerBase
     {
-
+        [HttpGet]
+        public async Task<object> Get()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

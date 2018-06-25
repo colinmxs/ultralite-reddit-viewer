@@ -7,15 +7,14 @@ module.exports = (env) => {
     const isDevBuild = !(env && env.prod);
     return [{
         stats: { modules: false },
-        entry: { 'main': './ClientApp/boot-app.js' },
+        entry: { 'main': './Features/boot-app.js' },
         resolve: {
             extensions: ['.js', '.vue'],
             alias: {
                 'vue$': 'vue/dist/vue',
-                'components': path.resolve(__dirname, './ClientApp/components'),
-                'views': path.resolve(__dirname, './ClientApp/views'),
-                'utils': path.resolve(__dirname, './ClientApp/utils'),
-                'api': path.resolve(__dirname, './ClientApp/store/api')
+                'infrastructure': path.resolve(__dirname, './Infrastructure'),
+                'features': path.resolve(__dirname, './Features'),
+                'shared': path.resolve(__dirname, './Features/Shared')
             }
         },
         output: {
@@ -25,8 +24,8 @@ module.exports = (env) => {
         },
         module: {
             rules: [
-                { test: /\.vue$/, include: /ClientApp/, use: 'vue-loader' },
-                { test: /\.js$/, include: /ClientApp/, use: 'babel-loader' },
+                { test: /\.vue$/, include: /Features/, use: 'vue-loader' },
+                { test: /\.js$/, include: /Features/, use: 'babel-loader' },
                 { test: /\.css$/, use: isDevBuild ? ['style-loader', 'css-loader'] : ExtractTextPlugin.extract({ use: 'css-loader' }) },
                 { test: /\.(png|jpg|jpeg|gif|svg)$/, use: 'url-loader?limit=25000' }
             ]

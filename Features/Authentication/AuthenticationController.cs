@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using System;
 using System.Threading.Tasks;
 
@@ -15,7 +14,7 @@ namespace UltraliteRedditViewer.Controllers
 
         public IActionResult GetCode()
         {                      
-            return Redirect(_authProvider.GetAuthUrl(Guid.NewGuid().ToString(), RedditSharp.AuthProvider.Scope.mysubreddits));
+            return Redirect(_authProvider.GetAuthUrl(Guid.NewGuid().ToString(), RedditSharp.AuthProvider.Scope.identity, true));
         }
         
         public async Task<string> GetToken(string code)

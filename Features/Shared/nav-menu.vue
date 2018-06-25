@@ -2,7 +2,7 @@
     <div class="main-nav">
         <div class="navbar navbar-inverse">
             <div class="navbar-header">
-                <button type="button" class="navbar-toggle" v-on:click="toggleCollapsed">
+                <button type="button" class="navbar-toggle" v-on:click="!collapsed">
                     <span class="sr-only">Toggle navigation</span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
@@ -20,8 +20,9 @@
                                 <span :class="route.style"></span> {{ route.display }}
                             </router-link>
                         </li>
-                        <li v-if="!isAuthenticated">
-                            <a href="/authentication/getcode">Sign In</a>
+                        <li>
+                            <button class="btn btn-danger log" @click="handleLogout()">Log out </button>
+                            <button class="btn btn-info log" @click="handleLogin()">Log In</button>
                         </li>
                     </ul>
                 </div>
@@ -31,7 +32,8 @@
 </template>
 
 <script>
-    import { routes } from '../routes'
+    import { routes } from 'features/routes'
+    import { isLoggedIn, login, logout } from 'features/authentication/auth';
 
     export default {
         data() {
@@ -41,17 +43,20 @@
             }
         },
         methods: {
-            toggleCollapsed: function (event) {
-                this.collapsed = !this.collapsed;
+            handleLogin() {
+                login();
             },
-            isAuthenticated() {
-                return localStorage.getItem('access_token') != null
-            }
+            handleLogout() {
+                logout();
+            },
+            isLoggedIn() {
+                return isLoggedIn();
+            },
         }
     }
 </script>
 
-<style>
+<style scoped>
     .slide-enter-active, .slide-leave-active {
         transition: max-height .35s
     }
@@ -62,5 +67,9 @@
 
     .slide-enter-to, .slide-leave {
         max-height: 20em;
+    }   
+
+    .log {
+        margin: 5px 10px 0 0;
     }
 </style>

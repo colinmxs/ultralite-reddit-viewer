@@ -15,15 +15,11 @@
 
 <script>
 import Vue from 'vue'
-import NavMenu from './nav-menu'
+import NavMenu from 'shared/nav-menu'
 
 Vue.component('nav-menu', NavMenu);
 
-export default {
-    data() {
-        return {
-        }
-    }
+export default {    
 }
 </script>
 

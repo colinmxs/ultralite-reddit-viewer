@@ -1,9 +1,9 @@
-﻿import Vue from 'vue'
+import Vue from 'vue'
 import axios from 'axios'
 import router from './router'
-import store from './store'
+import store from 'shared/store'
 import { sync } from 'vuex-router-sync'
-import App from 'components/app-root'
+import App from './app-root'
 
 Vue.prototype.$http = axios;
 

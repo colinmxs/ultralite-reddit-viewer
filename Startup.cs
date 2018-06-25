@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using UltraliteRedditViewer.Infrastructure;
 
 namespace UltraliteRedditViewer
 {
@@ -29,7 +31,10 @@ namespace UltraliteRedditViewer
         {
             // Add framework services.
             services.AddMvc();
-
+            services.Configure<RazorViewEngineOptions>(opts =>
+            {
+                opts.ViewLocationExpanders.Add(new FeatureFolderViewLocationExpander());
+            });
             var webAgentPool = new RedditSharp.RefreshTokenWebAgentPool(Configuration["RedditClientID"], Configuration["RedditClientSecret"], Configuration["RedditRedirectURI"])
             {
                 DefaultRateLimitMode = RedditSharp.RateLimitMode.Burst,

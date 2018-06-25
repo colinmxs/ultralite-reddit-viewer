@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Razor;
@@ -5,6 +6,8 @@ using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 using UltraliteRedditViewer.Infrastructure;
 
 namespace UltraliteRedditViewer
@@ -29,7 +32,22 @@ namespace UltraliteRedditViewer
 
         public void ConfigureServices(IServiceCollection services)
         {
-            // Add framework services.
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["SecurityKey"]));
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = "http://localhost:58893",
+                        ValidAudience = "http://localhost:58893",
+                        IssuerSigningKey = key
+                    };
+                });
+
             services.AddMvc();
             services.Configure<RazorViewEngineOptions>(opts =>
             {
@@ -63,8 +81,7 @@ namespace UltraliteRedditViewer
             {
                 app.UseExceptionHandler("/Home/Error");
             }
-
-            app.UseStaticFiles();
+            app.UseAuthentication();
 
             app.UseMvc(routes =>
             {
@@ -76,6 +93,8 @@ namespace UltraliteRedditViewer
                     name: "spa-fallback",
                     defaults: new { controller = "Home", action = "Index" });
             });
+
+            app.UseStaticFiles();
         }
     }
 }

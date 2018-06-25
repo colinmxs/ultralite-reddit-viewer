@@ -2,26 +2,18 @@
 </template>
 
 <script>
-    import { fetchToken, setAccessToken } from 'features/authentication/auth'   
+    import { setAccessToken } from 'features/authentication/auth'   
 
     export default
         {                       
             mounted() {
-                let oauthCode = this.$route.query.code
-                let oauthState = this.$route.query.state
+                let token = this.$route.query.token
 
-                if (oauthCode == null) {
-                    this.$route.go('/')
+                if (token == null) {
+                    this.$router.push('/')
                 }
-                
-                fetchToken(oauthCode, oauthState)
-                    .then((token) => {
-                        setAccessToken(token)
-                        this.$router.push('/')
-                    },
-                    () => {
-                        this.$router.push('/')
-                    })                
+                setAccessToken(token)
+                this.$router.push('/')
             }
         }
 </script>

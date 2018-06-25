@@ -1,6 +1,6 @@
 import axios from 'axios';
 import Router from 'vue-router';
-import { invalidateToken, getToken } from './api';
+import { invalidateToken } from './api';
 const ACCESS_TOKEN_KEY = 'access_token';
 
 var router = new Router({
@@ -17,10 +17,6 @@ export function logout() {
             clearAccessToken();
             router.go('/');
         });
-}
-
-export function fetchToken(code, state) {
-    getToken(code, state).then((token) => token);
 }
 
 export function getAccessToken() {

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 namespace UltraliteRedditViewer.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
     public class RedditController : ControllerBase
     {
@@ -25,7 +26,7 @@ namespace UltraliteRedditViewer.Controllers
         {
             object me = null;
             //get token from header
-            var token = HttpContext.Request.Headers.Single(h => h.Key == "Authorization").Value.ToString().Remove(0, 7);
+            var token = User.Claims.Single(c => c.Type == "Reddit-Access-Token").Value;
             var reddit = new RedditSharp.Reddit(token);
             await reddit.InitOrUpdateUserAsync();
             return reddit.User;

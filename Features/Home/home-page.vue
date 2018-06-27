@@ -1,14 +1,13 @@
 <template>
     <div>
         <h1>Home Page</h1>        
-        <post v-for="item in posts">{{item}}</post>
-        <pre>{{user}}</pre>
+        <post v-for="item in posts" :data="item"></post>
     </div>
 </template>
 
 <script>
     import { isLoggedIn } from 'features/authentication/auth';
-    import { getRSlashPopularFeed, getUsersSubsFeed, getUser } from 'features/reddit/api'
+    import { getRSlashPopularFeed, getUsersSubsFeed } from 'features/reddit/api'
     import Post from './post'
 
     export default
@@ -24,17 +23,12 @@
                 Post
             },
             mounted() {
-                if (this.isLoggedIn())
-                    this.loadUser()
+                this.loadPosts()
             },
             methods: {
                 isLoggedIn() {
                     return isLoggedIn();
-                },
-                loadUser() {
-                    getUser()
-                        .then((user) => this.user = user)
-                },
+                },                
                 loadPosts()
                 {
                     if (!this.isLoggedIn())

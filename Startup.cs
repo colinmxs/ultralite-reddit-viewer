@@ -35,12 +35,12 @@ namespace UltraliteRedditViewer
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["SecurityKey"]));
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
-                {
+                {                    
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
+                        RequireExpirationTime = false,
                         ValidateIssuer = true,
                         ValidateAudience = true,
-                        ValidateLifetime = true,
                         ValidateIssuerSigningKey = true,
                         ValidIssuer = "http://localhost:58893",
                         ValidAudience = "http://localhost:58893",
@@ -56,10 +56,10 @@ namespace UltraliteRedditViewer
             var webAgentPool = new RedditSharp.RefreshTokenWebAgentPool(Configuration["RedditClientID"], Configuration["RedditClientSecret"], Configuration["RedditRedirectURI"])
             {
                 DefaultRateLimitMode = RedditSharp.RateLimitMode.Burst,
-                DefaultUserAgent = "ScooterMcGavin420_blayzit"
+                DefaultUserAgent = "dotnet:UVR:v0.0.1 (by /u/colinmxs)"
             };
             
-            services.AddScoped(sp => new RedditSharp.AuthProvider(Configuration["RedditClientID"], Configuration["RedditClientSecret"], Configuration["RedditRedirectURI"]));
+            services.AddScoped(sp => new RedditAuthProvider(Configuration["RedditClientID"], Configuration["RedditClientSecret"], Configuration["RedditRedirectURI"]));
             services.AddSingleton(webAgentPool);
         }
 

@@ -1,27 +1,35 @@
-﻿import Vue from 'vue'
+import Vue from 'vue'
 import Vuex from 'vuex'
+import { isLoggedIn } from 'features/authentication/auth';
+import { getRSlashPopularFeed, getUsersSubsFeed } from 'features/reddit/api'
+
 
 Vue.use(Vuex)
 
 // TYPES
-const MAIN_SET_COUNTER = 'MAIN_SET_COUNTER'
+const SAVE_POSTS = 'SAVE_POSTS'
 
 // STATE
 const state = {
-    counter: 0
+    posts: []
 }
 
 // MUTATIONS
 const mutations = {
-    [MAIN_SET_COUNTER](state, obj) {
-        state.counter = obj.counter
+    [SAVE_POSTS](state, obj) {        
+        state.posts.push(...obj.data)
     }
 }
 
 // ACTIONS
 const actions = ({
-    setCounter({ commit }, obj) {
-        commit(MAIN_SET_COUNTER, obj)
+    loadPosts({ commit }, opts) {
+        if (!isLoggedIn())
+            getRSlashPopularFeed(opts.skip, opts.take)
+                .then((result) => commit(SAVE_POSTS, result))
+        else
+            getUsersSubsFeed(opts.skip, opts.take)
+                .then((result) => commit(SAVE_POSTS, result))
     }
 })
 

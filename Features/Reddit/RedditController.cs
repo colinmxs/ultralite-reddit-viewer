@@ -25,7 +25,7 @@ namespace UltraliteRedditViewer.Controllers
 
         [Route("me")]        
         [HttpGet]
-        public async Task<object> Me()
+        public async Task<object> Me(int skip = 0, int take = 25)
         {
             var userName = User.Identity.Name;
             var webAgent = await _webAgentPool.GetOrCreateWebAgentAsync(userName, (name, agent, limit) =>
@@ -38,33 +38,31 @@ namespace UltraliteRedditViewer.Controllers
             });
 
             var reddit = new RedditSharp.Reddit(webAgent, true);
-            var listing = reddit.User.GetSubscribedSubreddits();
-            var newestPosts = new List<string>();
-            listing.ForEach(async sr =>
+            List<object> posts = new List<object>();
+            reddit.FrontPage.GetPosts().Skip(skip).Take(take).ForEach(p =>
             {
-                var newestPost = await sr.GetPosts(RedditSharp.Things.Subreddit.Sort.New, 1)
-                .First()
-                .ConfigureAwait(false);
-                newestPosts.Add(newestPost.Title);
+                posts.Add(p);
             });
-            return newestPosts;
+            //TODO create viewmodel instead of using anon object
+            return new { data = posts, nextPageUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/api/reddit/me?skip=25&take=25" };
         }
 
         [Route("popular")]
         [AllowAnonymous]
         [HttpGet]
         [ResponseCache(Duration = 360, Location = ResponseCacheLocation.Any)]
-        public async Task<object> Popular(int pageSize)
+        public async Task<object> Popular(int skip = 0, int take = 25)
         {
             var webAgent = new RedditSharp.BotWebAgent(_config["PopbotUN"], _config["PopbotPW"], _config["RedditClientID-Popbot"], _config["RedditClientSecret-Popbot"], _config["RedditRedirectURI-Popbot"]);
             var reddit = new RedditSharp.Reddit(webAgent, false);
             var posts = new List<Post>();
-            await reddit.RSlashAll.GetPosts(10).ForEachAsync(post =>
+            await reddit.RSlashAll.GetPosts().Skip(skip).Take(take).ForEachAsync(post =>
             {
                 posts.Add(post);
             });
 
-            return posts;
+            //TODO create viewmodel instead of using anon object
+            return new { data = posts, nextPageUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/api/reddit/popular?skip=25&take=25" };
         }
     }
 }

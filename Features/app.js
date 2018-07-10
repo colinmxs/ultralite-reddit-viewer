@@ -4,6 +4,9 @@ import router from './router'
 import store from 'shared/store'
 import { sync } from 'vuex-router-sync'
 import App from './app-root'
+import VueMaterial from 'vue-material'
+Vue.use(VueMaterial)
+
 
 Vue.prototype.$http = axios;
 

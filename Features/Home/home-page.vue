@@ -33,18 +33,17 @@
                 this.loadPosts(0, 25)
             },
             methods: {                               
-                loadPosts(skip, take)
+                async loadPosts(skip, take)
                 {
                     this.showSpinner = 1
                     this.skip = skip
                     this.take = take
-                    this.$store.dispatch('loadPosts', {
+                    await this.$store.dispatch('loadPosts', {
                         skip: skip,
                         take: take
                     })
-                        .then(() => {
-                            this.showSpinner = 0                            
-                        })
+
+                    this.showSpinner = 0
                 }
             }            
         }

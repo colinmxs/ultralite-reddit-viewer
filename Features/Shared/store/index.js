@@ -23,13 +23,15 @@ const mutations = {
 
 // ACTIONS
 const actions = ({
-    loadPosts({ commit }, opts) {
-        if (!isLoggedIn())
-            getRSlashPopularFeed(opts.skip, opts.take)
-                .then((result) => commit(SAVE_POSTS, result))
-        else
-            getUsersSubsFeed(opts.skip, opts.take)
-                .then((result) => commit(SAVE_POSTS, result))
+    async loadPosts({ commit }, opts) {
+        if (!isLoggedIn()) {
+            var result = await getRSlashPopularFeed(opts.skip, opts.take)
+            commit(SAVE_POSTS, result)
+        }
+        else {
+            var result = await getUsersSubsFeed(opts.skip, opts.take)
+            commit(SAVE_POSTS, result)
+        }
     }
 })
 

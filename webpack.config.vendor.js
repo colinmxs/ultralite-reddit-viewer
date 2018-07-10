@@ -18,7 +18,7 @@ module.exports = (env) => {
             ]
         },
         entry: {
-            vendor: ['event-source-polyfill', 'vue', 'vuex', 'axios', 'vue-router', 'vue-material'],
+            vendor: ['event-source-polyfill', 'vue', 'vuex', 'axios', 'vue-router', 'vue-material', 'vue-material/dist/vue-material.min.css', 'vue-material/dist/theme/default-dark.css'],
         },
         output: {
             path: path.join(__dirname, 'wwwroot', 'dist'),

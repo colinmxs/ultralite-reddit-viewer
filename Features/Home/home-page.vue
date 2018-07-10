@@ -1,51 +1,57 @@
 <template>
-    <div>
-        <h1>Home Page</h1>        
+    <div class="home-content">        
         <post v-for="item in posts" :data="item"></post>
+        <div class="text-center">
+            <md-progress-spinner class="text-center" md-mode="indeterminate" v-if="showSpinner === 1"></md-progress-spinner>
+            <a v-on:click="loadPosts(skip+25, 25)" v-else>Load More Posts...</a>
+        </div>
     </div>
 </template>
 
-<script>
-    import { isLoggedIn } from 'features/authentication/auth';
-    import { getRSlashPopularFeed, getUsersSubsFeed } from 'features/reddit/api'
+<script>    
     import Post from './post'
+    import { mapState } from 'vuex'
 
     export default
         {
             data() {
                 return {
-                    posts: '',
-                    pageSize: 10,
-                    user: {}
+                    showSpinner: 0,
+                    skip: '',
+                    take: ''
                 }
+            },
+            computed: {
+                ...mapState([
+                    'posts'
+                ])
             },
             components: {
                 Post
             },
             mounted() {
-                this.loadPosts()
+                this.loadPosts(0, 25)
             },
-            methods: {
-                isLoggedIn() {
-                    return isLoggedIn();
-                },                
-                loadPosts()
+            methods: {                               
+                loadPosts(skip, take)
                 {
-                    if (!this.isLoggedIn())
-                        getRSlashPopularFeed(this.pageSize)
-                            .then((posts) =>
-                            {
-                                this.posts = posts
-                            })
-                    else
-                        getUsersSubsFeed(this.pageSize)
-                            .then((posts) => {
-                                this.posts = posts
-                            })                    
+                    this.showSpinner = 1
+                    this.skip = skip
+                    this.take = take
+                    this.$store.dispatch('loadPosts', {
+                        skip: skip,
+                        take: take
+                    })
+                        .then(() => {
+                            this.showSpinner = 0                            
+                        })
                 }
-            }
+            }            
         }
 </script>
 
-<style>
+<style scoped>
+    .text-center{
+        text-align: center;
+    }
 </style>

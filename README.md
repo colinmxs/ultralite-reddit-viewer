@@ -23,17 +23,3 @@
 # Extras
 
 - Get Chrome DevTools for Vue [here](https://chrome.google.com/webstore/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd)
-
-
-# Upcoming Features (to-do list)
-
-**[TODO] Install template:**
- * `dotnet new --install Microsoft.AspNetCore.SpaTemplates.Vue2Js`
-
-**[TODO] To use the template:**
- * mkdir + chdir
- * `dotnet new -l`
- * `dotnet new vue2js`
- * `dotnet restore`
- * `npm install`
- * Run the application (`dotnet run` or `npm run dev`)

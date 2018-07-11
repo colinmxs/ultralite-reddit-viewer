@@ -1,3 +1,5 @@
+[![Build status](https://ci.appveyor.com/api/projects/status/v6d2x3wl9wid8ma0?svg=true)](https://ci.appveyor.com/project/colinmxs/ultralite-reddit-viewer)
+
 # Table of Contents
 
 * [Prerequisites](#prerequisites)
